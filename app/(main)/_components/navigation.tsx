@@ -4,10 +4,11 @@ import { usePathname } from "next/navigation";
 import { ElementRef, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import UserItem from "./user-item";
-import { useQuery, useMutation } from "convex/react";
+import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import Item from "./item";
 import { toast } from "sonner";
+import DocumentList from "./document-list";
 
 interface NavigationProps {
     children?: React.ReactNode;
@@ -16,7 +17,6 @@ interface NavigationProps {
 const Navigation: React.FC<NavigationProps> = () => {
     const pathname = usePathname();
     const isMobile = useMediaQuery("(max-width: 768px)");
-    const documents = useQuery(api.documents.get);
     const create = useMutation(api.documents.create);
 
     const isResizingRef = useRef(false);
@@ -129,10 +129,8 @@ const Navigation: React.FC<NavigationProps> = () => {
                     <Item label="Settings" icon={Settings} onClick={() => {}} />
                     <Item onClick={onCreate} label="New page" icon={PlusCircle} />
                 </div>
-                <div className="flex flex-col space-y-2 p-4">
-                    {documents?.map((document) => (
-                        <p key={document._id}>{document.title}</p>
-                    ))}
+                <div className="mt-4">
+                    <DocumentList/>
                 </div>
                 <div
                     onMouseDown={handleMouseDown}
