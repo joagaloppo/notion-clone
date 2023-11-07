@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import ConvexProvider from "@/components/providers/convex-provider";
 import { Toaster } from "sonner";
+import ModalProvider from "@/components/providers/modal-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -33,6 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <ConvexProvider>
                     <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
                         <Toaster position="bottom-center" />
+                        <ModalProvider />
                         {children}
                     </ThemeProvider>
                 </ConvexProvider>
