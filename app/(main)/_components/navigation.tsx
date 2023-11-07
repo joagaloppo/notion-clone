@@ -11,12 +11,14 @@ import { toast } from "sonner";
 import DocumentList from "./document-list";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import TrashBox from "./trash-box";
+import { useSearch } from "@/hooks/use-search";
 
 interface NavigationProps {
     children?: React.ReactNode;
 }
 
 const Navigation: React.FC<NavigationProps> = () => {
+    const search = useSearch();
     const pathname = usePathname();
     const isMobile = useMediaQuery("(max-width: 768px)");
     const create = useMutation(api.documents.create);
@@ -127,7 +129,7 @@ const Navigation: React.FC<NavigationProps> = () => {
                 </div>
                 <div>
                     <UserItem />
-                    <Item label="Search" icon={Search} isSearch onClick={() => {}} />
+                    <Item label="Search" icon={Search} isSearch onClick={search.onOpen} />
                     <Item label="Settings" icon={Settings} onClick={() => {}} />
                     <Item onClick={onCreate} label="New page" icon={PlusCircle} />
                 </div>
@@ -139,7 +141,7 @@ const Navigation: React.FC<NavigationProps> = () => {
                             <Item label="Trash" icon={Trash} />
                         </PopoverTrigger>
                         <PopoverContent side={isMobile ? "bottom" : "right"} className="p-0 w-72">
-                            <TrashBox/>
+                            <TrashBox />
                         </PopoverContent>
                     </Popover>
                 </div>
