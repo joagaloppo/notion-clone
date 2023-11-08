@@ -8,7 +8,7 @@ import {
   Settings,
   Trash,
 } from "lucide-react";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { ElementRef, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import UserItem from "./user-item";
@@ -32,6 +32,7 @@ interface NavigationProps {
 }
 
 const Navigation: React.FC<NavigationProps> = () => {
+  const router = useRouter();
   const search = useSearch();
   const settings = useSettings();
   const pathname = usePathname();
@@ -120,7 +121,9 @@ const Navigation: React.FC<NavigationProps> = () => {
   };
 
   const onCreate = () => {
-    const promise = create({ title: "Untitled" });
+    const promise = create({ title: "Untitled" }).then((documentId) =>
+      router.push(`/documents/${documentId}`)
+    );
     toast.promise(promise, {
       loading: "Creating note...",
       success: "Note created!",
@@ -183,16 +186,9 @@ const Navigation: React.FC<NavigationProps> = () => {
           isMobile && "left-0 w-full"
         )}
       >
-        {!!params.documentId ? (
+        {!!params.documentId && (
           <Navbar isCollapsed={isCollapsed} onResetWidth={resetWidth} />
-        ) : (
-          <div></div>
         )}
-        <nav className="bg-transparent px-3 py-2 w-full">
-          {/* {isCollapsed && (
-                        <MenuIcon onClick={resetWidth} role="button" className="w-6 h-6 text-muted-foreground" />
-                    )} */}
-        </nav>
       </div>
     </>
   );

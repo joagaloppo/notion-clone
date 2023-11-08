@@ -11,13 +11,14 @@ import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { Id } from "@/convex/_generated/dataModel";
 import { useEdgeStore } from "@/lib/edgestore";
+import { Skeleton } from "./ui/skeleton";
 
 interface CoverProps {
   url?: string;
   preview?: boolean;
 }
 
-const Cover: React.FC<CoverProps> = ({ url, preview }) => {
+const Cover = ({ url, preview }: CoverProps) => {
   const { edgestore } = useEdgeStore();
   const coverImage = useCoverImage();
   const params = useParams();
@@ -47,7 +48,7 @@ const Cover: React.FC<CoverProps> = ({ url, preview }) => {
       {url && !preview && (
         <div className="opacity-0 group-hover:opacity-100 absolute bottom-5 right-5 flex items-center gap-x-2">
           <Button
-            onClick={()=> coverImage.onReplace(url)}
+            onClick={() => coverImage.onReplace(url)}
             className="text-muted-foreground text-xs bg-white"
             variant="outline"
           >
@@ -66,6 +67,10 @@ const Cover: React.FC<CoverProps> = ({ url, preview }) => {
       )}
     </div>
   );
+};
+
+Cover.Skeleton = function CoverSkeleton() {
+  return <Skeleton className="w-full h-[12vh] rounded-none" />;
 };
 
 export default Cover;
