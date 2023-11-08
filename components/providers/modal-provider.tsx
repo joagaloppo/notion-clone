@@ -2,25 +2,27 @@
 
 import { useEffect, useState } from "react";
 import SettingsModal from "@/components/modals/settings-modal";
+import CoverImageModal from "@/components/modals/cover-image-modal";
 
 interface ModalProviderProps {
-    children?: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 const ModalProvider: React.FC<ModalProviderProps> = () => {
-    const [isMounted, setIsMounted] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
-    useEffect(() => {
-        setIsMounted(true);
-    }, []);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
-    if (!isMounted) return null;
+  if (!isMounted) return null;
 
-    return (
-        <>
-            <SettingsModal />
-        </>
-    );
+  return (
+    <>
+      <SettingsModal />
+      <CoverImageModal />
+    </>
+  );
 };
 
 export default ModalProvider;
