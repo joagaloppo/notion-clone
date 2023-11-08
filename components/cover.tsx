@@ -10,6 +10,7 @@ import { api } from "@/convex/_generated/api";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { Id } from "@/convex/_generated/dataModel";
+import { useEdgeStore } from "@/lib/edgestore";
 
 interface CoverProps {
   url?: string;
@@ -17,19 +18,22 @@ interface CoverProps {
 }
 
 const Cover: React.FC<CoverProps> = ({ url, preview }) => {
+  const { edgestore } = useEdgeStore();
   const coverImage = useCoverImage();
   const params = useParams();
   const removeCoverImage = useMutation(api.documents.removeCoverImage);
 
-
   const onRemove = () => {
-    const promise = removeCoverImage({ id: params.documentId as Id<"documents"> });
+    if (url) edgestore.publicFiles.delete({ url });
+    const promise = removeCoverImage({
+      id: params.documentId as Id<"documents">,
+    });
     toast.promise(promise, {
       loading: "Removing cover image...",
       success: "Cover image removed",
       error: "Error removing cover image",
     });
-  }
+  };
 
   return (
     <div
@@ -43,7 +47,7 @@ const Cover: React.FC<CoverProps> = ({ url, preview }) => {
       {url && !preview && (
         <div className="opacity-0 group-hover:opacity-100 absolute bottom-5 right-5 flex items-center gap-x-2">
           <Button
-            onClick={coverImage.onOpen}
+            onClick={()=> coverImage.onReplace(url)}
             className="text-muted-foreground text-xs bg-white"
             variant="outline"
           >
